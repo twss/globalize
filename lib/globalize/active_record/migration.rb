@@ -36,7 +36,7 @@ module Globalize
           complete_translated_fields if fields.blank?
           validate_translated_fields
 
-          create_translation_table
+          create_translation_table(options)
           add_translation_fields!(fields, options)
           create_translations_index(options)
           clear_schema_cache!
@@ -71,11 +71,17 @@ module Globalize
           end
         end
 
-        def create_translation_table
+        def create_translation_table(options = {})
+          locale_options = (options[:locale_options] || {})
+
           connection.create_table(translations_table_name) do |t|
             t.references table_name.sub(/^#{table_name_prefix}/, '').singularize, :null => false, :index => false, :type => column_type(model.primary_key).to_sym
-            t.string :locale, :null => false, :limit => 16
+            t.string :locale, :null => false
             t.timestamps :null => false
+          end
+
+          if locale_options[:type]
+            connection.change_column(translations_table_name, :locale, locale_options[:type])
           end
         end
 
