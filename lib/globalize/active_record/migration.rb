@@ -27,7 +27,7 @@ module Globalize
         end
 
         def create_translation_table!(fields = {}, options = {})
-          extra = options.keys - [:migrate_data, :remove_source_columns, :unique_index]
+          extra = options.keys - [:locale_options, :migrate_data, :remove_source_columns, :unique_index]
           if extra.any?
             raise ArgumentError, "Unknown migration #{'option'.pluralize(extra.size)}: #{extra}"
           end
