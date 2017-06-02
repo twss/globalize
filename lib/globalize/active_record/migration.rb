@@ -74,7 +74,7 @@ module Globalize
         def create_translation_table
           connection.create_table(translations_table_name) do |t|
             t.references table_name.sub(/^#{table_name_prefix}/, '').singularize, :null => false, :index => false, :type => column_type(model.primary_key).to_sym
-            t.string :locale, :null => false
+            t.string :locale, :null => false, :limit => 16
             t.timestamps :null => false
           end
         end
